@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+    rust_database:
+        image: postgres:11.6
+        container_name: rust_database
+        restart: always
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_PASSWORD: pass123
+        volumes:
+            - ./rust_database:/var/lib/postgresql/data
