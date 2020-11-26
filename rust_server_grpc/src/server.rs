@@ -1,6 +1,7 @@
 use include_dir::{include_dir, Dir};
 use sqlx_pg_migrate::migrate;
 use tonic::transport::Server;
+mod model;
 
 pub mod grpc_protos {
     tonic::include_proto!("rust_app");

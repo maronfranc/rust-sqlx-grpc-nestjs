@@ -3,13 +3,14 @@ use tonic::{Request, Response, Status};
 
 use crate::grpc_protos::user_service_server::{UserService, UserServiceServer};
 use crate::grpc_protos::{ByIdRequest, EmptyRequest, FindAllUsersResponse, FindUserResponse};
+use crate::model;
 mod user_repository;
 
 pub fn new_grpc_service(pool: PgPool) -> UserServiceServer<UserController> {
     let controller = UserController::new_grpc_service(pool);
     UserServiceServer::new(controller)
 }
-fn into_response(user: &user_repository::UserRepository) -> FindUserResponse {
+fn into_response(user: &model::User) -> FindUserResponse {
     FindUserResponse {
         id: user.id,
         email: user.email.clone(),
