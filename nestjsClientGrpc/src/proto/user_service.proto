@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package rust_app;
+
+service UserService { 
+  rpc findOne (ByIdRequest) returns (FindUserResponse);
+  rpc findMany (EmptyRequest) returns (FindAllUsersResponse);
+  // rpc create (CreateRequest) returns (CreateResponse);
+}
+
+message EmptyRequest {}
+message ByIdRequest {
+  int32 id = 1;
+}
+
+message FindAllUsersResponse {
+  repeated FindUserResponse users = 1;
+}
+message FindUserResponse {
+  int32 id = 1;
+  string email = 2;
+  string username = 3;
+}
+
+message CreateRequest {
+  string email = 1;
+  string username = 2;
+  string password = 3;
+}
+message CreateResponse {
+  int32 id = 1;
+}

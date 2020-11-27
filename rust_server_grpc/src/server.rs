@@ -7,8 +7,6 @@ pub mod grpc_protos {
     tonic::include_proto!("rust_app");
 }
 use sqlx::postgres::PgPoolOptions;
-
-mod database;
 #[path = "user/user_controller.rs"]
 mod user_controller;
 
@@ -22,11 +20,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .max_connections(5)
         .connect(&DB_URL)
         .await?;
-    let row: (i64,) = sqlx::query_as("SELECT $1")
-        .bind(150_i64)
-        .fetch_one(&pool)
-        .await?;
-    println!("{:?}", row);
 
     let addr = "127.0.0.1:50051".parse().unwrap();
     println!("Server listening on {}", addr);
