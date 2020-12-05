@@ -2,7 +2,9 @@ use sqlx::postgres::PgPool;
 use tonic::{Request, Response, Status};
 
 use crate::grpc_protos::user_service_server::{UserService, UserServiceServer};
-use crate::grpc_protos::{ByIdRequest, EmptyRequest, FindAllUsersResponse, FindUserResponse};
+use crate::grpc_protos::{
+    ByIdRequest, EmptyRequest, FindAllUsersResponse, FindUserResponse, Person,
+};
 use crate::model;
 mod user_repository;
 
@@ -11,10 +13,16 @@ pub fn new_grpc_service(pool: PgPool) -> UserServiceServer<UserController> {
     UserServiceServer::new(controller)
 }
 fn into_response(user: &model::User) -> FindUserResponse {
+    let person = user.person.clone().unwrap();
     FindUserResponse {
         id: user.id,
         email: user.email.clone(),
         username: user.username.clone(),
+        person: Some(Person {
+            id: person.id,
+            first_name: person.first_name,
+            last_name: person.last_name,
+        }),
     }
 }
 pub struct UserController {
@@ -43,6 +51,7 @@ impl UserService for UserController {
             Err(_e) => return Err(Status::not_found("Not Found")),
         };
 
+        println!("{:#?}", users);
         Ok(Response::new(users))
     }
 
@@ -55,6 +64,7 @@ impl UserService for UserController {
             Ok(us) => into_response(&us),
             Err(_e) => return Err(Status::not_found("Not Found")),
         };
+        println!("{:#?}", user);
         Ok(Response::new(user))
     }
 }
