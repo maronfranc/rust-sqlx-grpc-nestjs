@@ -12,7 +12,7 @@ mod user_controller;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    const DB_URL: &str = "postgresql://postgres:pass123@localhost:5432/rust_microservice";
+    const DB_URL: &str = "postgresql://postgres:pass123@localhost:5432/rust_database";
     const MIGRATIONS: Dir = include_dir!("migrations");
     migrate(&DB_URL, &MIGRATIONS).await?;
 
